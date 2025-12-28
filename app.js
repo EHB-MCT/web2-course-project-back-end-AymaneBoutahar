@@ -10,10 +10,9 @@ app.use(cors());
 app.post("/login", (req, res) => {
     const {user, password} = req.body;
   if (user == "Aymane" && password == "web2") {
-    res.send("Login succesful");
+    res.send({message: "Login succesful!"});
   } else { 
-    console.error(error)
-    res.status(500).send("Error reading user/password")
+    res.status(401).send({message: "Error: wrong credentials."})
   }
 
 });
