@@ -23,17 +23,22 @@ app.post("/login", (req, res) => { //receive login data from front-end
 });
 
 
-app.post("/register", (req, res) =>{
+app.post("/register", async (req, res) =>{
   //console.log("BODY:", req.body);
   const {email, password} = req.body; //destructures everything
 
   if (!email || !password) { //checks if both fields aren't empty
     return res.status(400)
     .send({message: "Please fill in the required fields"})
+  } try {
+    const hashedpassword = await bcrypt.hash(password, 10);
+    console.log("EMAIL:", email);
+    console.log("PASSWORD:", password, hashedpassword);
+      res.send({message: "Registering user succesful!"})
+
+  } catch(error) {
+      res.status(500)({message: "Error password hashing"})
   }
-  //console.log("EMAIL:", email);
-  //console.log("PASSWORD:", password);
-  res.send({message: "Registering complete!"})
 });
 
 
