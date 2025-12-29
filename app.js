@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const express = require('express')
 const cors = require("cors")
 const connectDB = require("./db")
@@ -23,11 +24,15 @@ app.post("/login", (req, res) => { //receive login data from front-end
 
 
 app.post("/register", (req, res) =>{
-  console.log("BODY:", req.body);
-  
+  //console.log("BODY:", req.body);
   const {email, password} = req.body; //destructures everything
-  console.log("EMAIL:", email);
-  console.log("PASSWORD:", password);
+
+  if (!email || !password) { //checks if both fields aren't empty
+    return res.status(400)
+    .send({message: "Please fill in the required fields"})
+  }
+  //console.log("EMAIL:", email);
+  //console.log("PASSWORD:", password);
   res.send({message: "Registering complete!"})
 });
 
