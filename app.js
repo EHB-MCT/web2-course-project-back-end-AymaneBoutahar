@@ -7,8 +7,8 @@ const port = 3000
 app.use(express.json());
 app.use(cors());
 
-app.post("/login", (req, res) => {
-    const {user, password} = req.body;
+app.post("/login", (req, res) => { //receive login data from front-end
+    const {user, password} = req.body; //destructures username and password
   if (user == "Aymane" && password == "web2") {
     res.send({message: "Login succesful!"});
   } else { 
@@ -17,6 +17,7 @@ app.post("/login", (req, res) => {
 
 });
 
+//starts up the server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
