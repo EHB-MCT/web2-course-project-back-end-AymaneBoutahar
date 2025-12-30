@@ -37,9 +37,15 @@ app.post("/register", async (req, res) =>{
     return res.status(400)
     .send({message: "Please fill in the required fields"});
   } try {
-    const hashedpassword = await bcrypt.hash(password, 10);
-    const db = getDB();
+    const db = getDB(); //user the existing DB connection
     const usersCollection = db.collection("users"); //selects the users collection
+    const userExists = await usersCollection.findOne({name}); //checks if a user has the same name
+
+    if (userExists) {
+      return res.status(409).send({message: "This user already exists"}); //this message plays if theres a user with the inputted name
+    }
+    const hashedpassword = await bcrypt.hash(password, 10);
+
 
     //safely stores user
     await usersCollection.insertOne({
@@ -50,7 +56,7 @@ app.post("/register", async (req, res) =>{
 
   } catch(error) {
     console.error(error);
-      res.status(500)({message: "Error password hashing"});
+      res.status(500).send({message: "Error password hashing"});
   }
 });
 ///////////////////////REGISTER/////////////////////////
