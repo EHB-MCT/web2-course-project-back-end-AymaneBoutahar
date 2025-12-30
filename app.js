@@ -25,10 +25,10 @@ app.post("/login", async (req, res) => { //receive login data from front-end
     try {
       const db = getDB(); //user the existing DB connection
       const usersCollection = db.collection("users"); //selects the users collection
-      const userExists = await usersCollection.findOne({user}); //checks if a user has the same name
+      const userExists = await usersCollection.findOne({user}); //checks if a doesn't exist
 
       if (!userExists) {
-        return res.status(409).send({message: "This user already exists"}); //this message plays if theres a user with the inputted name
+        return res.status(409).send({message: "invalid input"}); //this message plays if this user exists for them to login
     }
 
     const correctPassword = await bcrypt.compare( // compares the passwords: 
@@ -60,7 +60,7 @@ app.post("/register", async (req, res) =>{
     return res.status(400)
     .send({message: "Please fill in the required fields"});
   } try {
-    const db = getDB(); //user the existing DB connection
+    const db = getDB(); //uses the existing DB connection
     const usersCollection = db.collection("users"); //selects the users collection
     const userExists = await usersCollection.findOne({user}); //checks if a user has the same name
 
@@ -84,6 +84,21 @@ app.post("/register", async (req, res) =>{
 });
 ///////////////////////REGISTER/////////////////////////
 
+///////////////////////GET COACHES/////////////////////////
+
+app.get("/coaches", async (req, res) => {
+  try {
+      const db = getDB(); //uses the existing DB connection
+      const coachesCollection = db.collection("coaches"); //selects the coaches collection
+
+      const coaches = await coachesCollection.find().toArray();
+
+      res.send(coaches);
+  } catch(error) {
+    console.error(error);
+    res.status(500).send({message: "Failure to find any coaches"})
+  }
+})
 
 //starts up the server
 app.listen(port, () => {
