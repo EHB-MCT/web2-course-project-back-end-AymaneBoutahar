@@ -1,30 +1,25 @@
-const credentials = require("./dbcredentials")
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = `mongodb+srv://${credentials.username}:${credentials.password}@register.wdqytym.mongodb.net/?appName=register`;
+const {MongoClient} = require("mongodb");
 
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+let db; //to store the connection with the database
 
-let db = null //to store the connection with the database
-
-async function connectDB() { //waits for results
-  //if connected we await for a promise result
-  if (!db) {
+const connectDB = async() => {
+  try{
+    const client = new MongoClient(process.env.MONGO_URI);
     await client.connect();
-
-    db = client.db("ragnadb");
-
-    console.log("Succesfully connected to MongoDB!");
+    db = client.db(process.env.DB_NAME);
+    console.log("MongoDB has been connected.");
+  } catch(error) {
+    console.error("Connection to MongoDB failed.");
+    process.exit(1);
   }
-
-  return db;  //return db to routes so they can start working
 }
 
-module.exports = connectDB; //export function so it can be reused in app.js
+const getDB = () => {
+  if (!db) {
+    throw new Error("Database not found");
+  }
+  return db;
+}
+
+module.exports = {connectDB, getDB}; //export function so it can be reused in app.js
