@@ -162,7 +162,7 @@ app.delete("/coaches/:id", async (req, res) => {
     });
   }
   
-});
+}); 
 
 ///////////////////////DELETE COACH/////////////////////////
 
