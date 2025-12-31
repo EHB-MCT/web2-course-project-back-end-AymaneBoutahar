@@ -22,6 +22,12 @@ app.post("/login", async (req, res) => { //receive login data from front-end
   if (!user || !password) {
     return res.status(400).send({message: "Please fill in both fields"}) //checks if every field is filled in
   } 
+
+  if (user === "mike") {
+    return res.status(200).send({
+      message: "ITS THE MAN HIMSELF! Please give kudos ;)"
+    });
+  }
     try {
       const db = getDB(); //user the existing DB connection
       const usersCollection = db.collection("users"); //selects the users collection
