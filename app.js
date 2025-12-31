@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-connectDB();
+connectDB(); //database connection
 
 ///////////////////////LOGIN/////////////////////////
 app.post("/login", async (req, res) => { //receive login data from front-end
@@ -102,7 +102,40 @@ app.get("/coaches", async (req, res) => {
 ///////////////////////GET COACHES/////////////////////////
 
 ///////////////////////CREATE COACH (if logged in)/////////////////////////
+app.post("/coaches", async (req, res) => {
+  try {
+  const {name, game, price, intro, facts} = req.body; //destructures everything
 
+  //validates information
+  if (!name || !game || !price || !intro) {
+    return res.status(400).send({
+      message: "Missing required info."
+    });
+  }
+  const db = getDB();
+  const coachesCollection = db.collection("coaches");
+  const createdCoach = { //creates a new coach in an object
+    name,
+    game,
+    price,
+    intro,
+    facts: facts || []
+  };
+  
+  await coachesCollection.insertOne(createdCoach); //adds the coach to the mongo collection
+  res.status(201).send({
+    message: "Welcome aboard, coach",
+    createdCoach
+  });
+  } catch(error) {
+    console.error(error);
+    res.status(500).send({
+      message: "Coach could not be created"
+    });
+  }
+
+});
+///////////////////////CREATE COACH/////////////////////////
 
 
 
