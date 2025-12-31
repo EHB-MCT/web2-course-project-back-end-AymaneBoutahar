@@ -29,7 +29,7 @@ app.post("/login", async (req, res) => { //receive login data from front-end
 
       if (!userExists) {
         return res.status(409).send({message: "invalid input"}); //this message plays if this user exists for them to login
-    }
+    };
 
     const correctPassword = await bcrypt.compare( // compares the passwords: 
       password,
@@ -38,11 +38,11 @@ app.post("/login", async (req, res) => { //receive login data from front-end
 
     if (!correctPassword) {
       return res.status(401).send({message: "Credentials don't match"}); //checks if password is correct
-    }
+    };
     //logs you in and returns with what user you logged in with
     res.send({message: "Succesfully logged in!",
       user: userExists.user
-    })
+    });
     
   }catch(error) {
       console.error(error);
@@ -66,7 +66,7 @@ app.post("/register", async (req, res) =>{
 
     if (userExists) {
       return res.status(409).send({message: "This user already exists"}); //this message plays if theres a user with the inputted name
-    }
+    };
     const hashedpassword = await bcrypt.hash(password, 10);
 
 
@@ -98,7 +98,15 @@ app.get("/coaches", async (req, res) => {
     console.error(error);
     res.status(500).send({message: "Failure to find any coaches"})
   }
-})
+});
+///////////////////////GET COACHES/////////////////////////
+
+///////////////////////CREATE COACH (if logged in)/////////////////////////
+
+
+
+
+
 
 //starts up the server
 app.listen(port, () => {
