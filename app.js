@@ -111,7 +111,7 @@ app.get("/coaches", async (req, res) => {
 });
 ///////////////////////GET COACHES/////////////////////////
 
-///////////////////////CREATE COACH (if logged in)/////////////////////////
+///////////////////////CREATE COACH/////////////////////////
 app.post("/coaches", async (req, res) => {
   try {
   const {name, game, price, intro, facts} = req.body; //destructures everything
